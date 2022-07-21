@@ -22,16 +22,11 @@ list2=[]
 flag1=False
 flag2=True
 while i < len(list1) and flag2:
-    index= 15 + list1[i].find("correlation-id".casefold())
-    if index > 14:
-        correlation_id2=list1[i][index:index+4]
-    else:
-        correlation_id2=""       
-    if correlation_id.casefold()==correlation_id2.casefold() or (len(correlation_id2)==0 and flag1 and j<3):
+    index= list1[i].find(correlation_id.casefold())
+    if (index > -1) or (flag1 and j<5):
         list2.append(list1[i])
-        flag1=True
-        
-        if len(correlation_id2)==0:
+        flag1=True        
+        if index==-1:
             j=j+1
         else:
             j=0
@@ -39,5 +34,6 @@ while i < len(list1) and flag2:
         flag2=False
     i=i+1    
 list3=list2[:len(list2)-j]
+print("\n\n")
 print("\n".join(list3))     
     
