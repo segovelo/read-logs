@@ -5,11 +5,20 @@ Created on Wed Jul 20 22:38:07 2022
 @author: Sebastian
 """
 from argparse import ArgumentParser
-import csv
-import json
-from pprint import pprint
 
+def check_file(file_name):
+    file_name = file_name.translate({ord(i): None for i in '!#@{}[]<>=+£$%^&*()?|,;:/\\\'\"'})
+    index = file_name.find(".")
+    if index > 0:
+        file_name = file_name[0:index]
+    elif index == 0:
+        file_name = file_name[1:]
+    file_name += ".log"    
+    return file_name
+    
+        
 def read(logs_file, correlation_id):
+    logs_file = check_file(logs_file)
     # opening the file in read mode
     my_file = open(logs_file, "r")
     # reading the file
@@ -17,7 +26,8 @@ def read(logs_file, correlation_id):
     # replacing end splitting the text
     # when newline ('\n') is seen.
     list1 = data.split("\n")
-    print(list1)
+    for s in list1:
+        print(s)
     my_file.close()
     
     i=0
