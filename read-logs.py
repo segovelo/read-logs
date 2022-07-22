@@ -39,11 +39,9 @@ def read(logs_file, correlation_id):
     while i < len(list1) and flag2:
         found_id = re.search(correlation_id, list1[i], re.IGNORECASE)
         if found_id or (flag1 and j<5):
-        #if (index > -1) or (flag1 and j<5):
             list2.append(list1[i])
             flag1=True
             if not found_id:
-            #if index==-1:
                 j=j+1
             else:
                 j=0
