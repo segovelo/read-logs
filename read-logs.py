@@ -37,7 +37,6 @@ def read(logs_file, correlation_id):
     flag1=False
     flag2=True
     while i < len(list1) and flag2:
-        index = list1[i].find(correlation_id.casefold())
         found_id = re.search(correlation_id, list1[i], re.IGNORECASE)
         if found_id or (flag1 and j<5):
         #if (index > -1) or (flag1 and j<5):
