@@ -5,7 +5,15 @@ Created on Wed Jul 20 22:38:07 2022
 @author: Sebastian
 """
 from argparse import ArgumentParser
+from jproperties import Properties
 import re
+
+props = Properties()
+with open('application.properties', 'rb') as app_props:
+    props.load(app_props)
+
+file_path = props.get("file_path").data
+
 
 def check_file(file_name):
     file_name = file_name.translate({ord(i): None for i in '!#@{}[]<>=+£$%^&*()?|,;:/\\\'\"'})
@@ -20,8 +28,9 @@ def check_file(file_name):
         
 def read(logs_file, correlation_id):
     logs_file = check_file(logs_file)
+    full_path = file_path + logs_file
     # opening the file in read mode
-    my_file = open(logs_file, "r")
+    my_file = open(full_path, "r")
     # reading the file
     data = my_file.read()
     # replacing end splitting the text
@@ -37,14 +46,13 @@ def read(logs_file, correlation_id):
     flag1=False
     flag2=True
     while i < len(list1) and flag2:
-        index = list1[i].find(correlation_id.casefold())
         found_id = re.search(correlation_id, list1[i], re.IGNORECASE)
         if found_id or (flag1 and j<5):
-        #if (index > -1) or (flag1 and j<5):
+            if(re.search("documentContent", list1[i], re.IGNORECASE)):
+                list1[i] = docContent(list1[i])
             list2.append(list1[i])
             flag1=True
             if not found_id:
-            #if index==-1:
                 j=j+1
             else:
                 j=0
@@ -56,9 +64,15 @@ def read(logs_file, correlation_id):
     print("\n".join(list3))
     return ("\n".join(list3))   
 
+def docContent(str):
+    start = 17 + str.find("documentContent=[")
+    end = str.find("]", start, len(str) - 1)
+    return (str[0:start] + str[start:start+3] + str[end:])
+
 def save(data, save_file):
     save_file = check_file(save_file)
-    with open(save_file, 'w') as f:
+    full_path = file_path + save_file
+    with open(full_path, 'w') as f:
         f.write(data)
         f.close()
 
