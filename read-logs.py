@@ -39,6 +39,8 @@ def read(logs_file, correlation_id):
     while i < len(list1) and flag2:
         found_id = re.search(correlation_id, list1[i], re.IGNORECASE)
         if found_id or (flag1 and j<5):
+            if(re.search("documentContent", list1[i], re.IGNORECASE)):
+                list1[i] = docContent(list1[i])
             list2.append(list1[i])
             flag1=True
             if not found_id:
@@ -59,6 +61,11 @@ def save(data, save_file):
         f.write(data)
         f.close()
 
+def docContent(str):
+    start = 17 + str.find("documentContent=[")
+    end = str.find("]", start, len(str) - 1)
+    return (str[0:start] + str[start:start+3] + str[end:])
+    
 if __name__ == '__main__':
    parser = ArgumentParser(description='A command line tool for extract info from logs')
    parser.add_argument('-s', '--save', action='store', help='read correlation-id from logs')
