@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Wed Jul 20 22:38:07 2022
 
@@ -12,6 +12,7 @@ props = Properties()
 with open('application.properties', 'rb') as app_props:
     props.load(app_props)
 file_path = props.get("file_path").data
+
 
 def check_file(file_name):
     file_name = file_name.translate({ord(i): None for i in '!#@{}[]<>=+£$%^&*()?|,;:/\\\'\"'})
@@ -73,11 +74,6 @@ def save(data, save_file):
     with open(full_path, 'w') as f:
         f.write(data)
         f.close()
-
-def docContent(str):
-    start = 17 + str.find("documentContent=[")
-    end = str.find("]", start, len(str) - 1)
-    return (str[0:start] + str[start:start+3] + str[end:])
     
 if __name__ == '__main__':
    parser = ArgumentParser(description='A command line tool for extract info from logs')
